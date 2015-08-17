@@ -4,11 +4,12 @@ import mimetypes
 import hashlib
 import re
 
+import os
 from os import listdir
 from os.path import isfile, join
 
 
-from extended_BaseHTTPServer import serve, route, override
+from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
 from tools import sorted_ls
 
@@ -29,6 +30,20 @@ def home(**kwargs):
 
     return render("liste.html", {"issues": issue_list})
 
+@route("/issue",["GET"])
+def issue(**kwargs):
+    if "id" not in kwargs:
+        return redirect("/")
+
+    # Load de l'issue
+    try:
+        id_issue = kwargs.get("id")[0]
+        issue = json.load(open(join(issuer_folder,id_issue)))
+    except:
+        return redirect("/")
+
+    return render("issue.html", {"issue": issue})
+
 @route("/author",["GET"])
 def author(**kwargs):
     author_list = []
@@ -41,6 +56,9 @@ def author(**kwargs):
 
     return render("author.html", {"authors": author_list})
 
+@route("/branch", ["GET"])
+def branch():
+    return render("branch.html", {"branchs": json.loads(get_branch())})
 
 @override("static")
 def handler_static(o, arguments, action):
@@ -61,5 +79,17 @@ def get_author(**kwargs):
     except:
         return json.dumps([])
 
+@route("/get_branch",["GET"])
+def get_branch(**kwargs):
+    command = "git branch -a"
+    try:
+        output = subprocess.check_output(command, shell=True).splitlines()
+        return json.dumps(output)
+    except:
+        return json.dumps([])
+
+
 if __name__ == '__main__':
+    if not os.path.exists(issuer_folder):
+        os.makedirs(issuer_folder)
     serve(ip="0.0.0.0", port=5000)
