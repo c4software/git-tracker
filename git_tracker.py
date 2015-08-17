@@ -1,13 +1,20 @@
 import subprocess
 import json
 
-from extended_BaseHTTPServer import serve,route
-from jinja_helper import render
+from extended_BaseHTTPServer import serve, route, override
+from jinja_helper import render, get_wd
 
 @route("/",["GET"])
 def home(**kwargs):
     return render("liste.html")
 
+@override("static")
+def handler_static(o, arguments, action):
+    try:
+        return {"content": open(get_wd()+o.path).read().replace('\n',''), "header":{"Content-type":"text/css"}}
+    except Exception as e:
+        print e
+        return "404"
 # API
 @route("/get_author",["GET"])
 def get_author(**kwargs):
