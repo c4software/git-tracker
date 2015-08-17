@@ -15,12 +15,35 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>Created at</th>
+                    <th>Updated at</th>
                 </tr>
             </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>
+                        <a href="/issue/{{issue.id}}">{{issue.title}}</a>
+                    </td>
+                    <td>{{issue.author}}</td>
+                    <td>
+                        <abbr class="timeago" title="{{issue.created_at}}">{{issue.created_at}}</abbr>
+                    </td>
+                    <td>
+                        <abbr class="timeago" title="{{issue.updated_at}}">{{issue.updated_at}}</abbr>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery("abbr.timeago").timeago();
+        });
+    </script>
+
 {% endblock %}

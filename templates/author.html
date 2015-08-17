@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h1>Author list</h1>
+            </div>
+            <div class="col-xs-12 col-md-6 text-right">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% for author in authors %}
+            <div class="col-xs-3 col-md-3 text-center">
+                <img src="http://www.gravatar.com/avatar/{{author.hash}}" />
+                <div>
+                    <small>{{author.name}}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
