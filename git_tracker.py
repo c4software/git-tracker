@@ -82,7 +82,7 @@ def get_author(**kwargs):
     command = "git log --all --format='%aN <%cE>' | sort -u"
     try:
         output = subprocess.check_output(command, shell=True).splitlines()
-        return json.dumps(output).decode('utf-8').strip()
+        return json.dumps(output)
     except:
         return json.dumps([])
 
@@ -91,7 +91,7 @@ def get_branch(**kwargs):
     command = "git branch -a"
     try:
         output = subprocess.check_output(command, shell=True).splitlines()
-        return json.dumps(output).decode('utf-8').strip()
+        return json.dumps(output)
     except:
         return json.dumps([])
 
@@ -100,7 +100,7 @@ def get_log(**kwargs):
     command = "git log --pretty=format:'%h - %an, %ar : %s' -10"
     try:
         output = subprocess.check_output(command, shell=True).splitlines()
-        return json.dumps(output).decode('ascii', 'ignore').decode('ascii')
+        return json.dumps(output).encode('ascii', 'ignore').decode('ascii') # todo
     except:
         return json.dumps([])
 
