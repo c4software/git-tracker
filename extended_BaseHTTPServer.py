@@ -25,7 +25,7 @@ def override(method=None):
 class extended_BaseHTTPServer(BaseHTTPServer.BaseHTTPRequestHandler):
 	def log_message(self, format, *args):
 		return ""
-		
+
 	def do_HEAD(s):
 		s.send_response(200)
 		s.send_header("Content-type", "text/html")
@@ -41,7 +41,7 @@ class extended_BaseHTTPServer(BaseHTTPServer.BaseHTTPRequestHandler):
 		o = urlparse(s.path)
 		arguments = parse_qs(o.query)
 		s.do_routing(o, arguments, "GET")
-	
+
 	def do_routing(s, o, arguments, action):
 		try:
 			if o.path in register_route[action]:
@@ -67,7 +67,7 @@ class extended_BaseHTTPServer(BaseHTTPServer.BaseHTTPRequestHandler):
 					else:
 						retour = handler_method['404'](o, arguments, action)
 						build_response(s, retour, 404)
-		except:
+		except Exception as e:
 			# Gestion des erreurs
 			if "500" not in handler_method:
 				build_response(s, "Internal Server Error", 500)

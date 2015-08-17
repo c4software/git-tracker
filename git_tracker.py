@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import subprocess
 import json
 import mimetypes
@@ -60,6 +62,11 @@ def author(**kwargs):
 def branch():
     return render("branch.html", {"branchs": json.loads(get_branch())})
 
+@route("/log", ["GET"])
+def branch():
+    return render("log.html", {"logs": json.loads(get_log())})
+
+
 @override("static")
 def handler_static(o, arguments, action):
     try:
@@ -75,7 +82,7 @@ def get_author(**kwargs):
     command = "git log --all --format='%aN <%cE>' | sort -u"
     try:
         output = subprocess.check_output(command, shell=True).splitlines()
-        return json.dumps(output)
+        return json.dumps(output).decode('utf-8').strip()
     except:
         return json.dumps([])
 
@@ -84,10 +91,18 @@ def get_branch(**kwargs):
     command = "git branch -a"
     try:
         output = subprocess.check_output(command, shell=True).splitlines()
-        return json.dumps(output)
+        return json.dumps(output).decode('utf-8').strip()
     except:
         return json.dumps([])
 
+@route("/get_log",["GET"])
+def get_log(**kwargs):
+    command = "git log --pretty=format:'%h - %an, %ar : %s' -10"
+    try:
+        output = subprocess.check_output(command, shell=True).splitlines()
+        return json.dumps(output).decode('ascii', 'ignore').decode('ascii')
+    except:
+        return json.dumps([])
 
 if __name__ == '__main__':
     if not os.path.exists(issuer_folder):
