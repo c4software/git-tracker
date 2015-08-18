@@ -25,9 +25,9 @@
                 {% for issue in issues %}
                 <tr>
                     <td>
-                        <a href="/issue?id={{issue.id}}">{{issue.title}}</a>
+                        <a href="/issue?id={{issue.id}}">{{issue.title|e}}</a>
                     </td>
-                    <td>{{issue.author}}</td>
+                    <td>{{issue.author|e}}</td>
                     <td>
                         <abbr class="timeago" title="{{issue.created_at}}">{{issue.created_at}}</abbr>
                     </td>
