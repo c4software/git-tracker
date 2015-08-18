@@ -49,6 +49,9 @@ def issue(**kwargs):
     issue['id']         = id_issue
     issue['content']    = markdown2.markdown(base64.b64decode(issue.get("content", "")))
 
+    # Get related comments
+    for f in sorted_ls("{0}/r{1}_*".format(issue_folder, id_issue)):
+        print (f)
 
     return render("issue.html", {"issue": issue})
 

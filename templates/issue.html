@@ -21,6 +21,22 @@
 
         <hr>
 
+        <form class="form-horizontal grayed_background" action="/add_comment" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="comments" name="comments" required style="width:100%;height: 170px;"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12 text-right">
+                        <button id="validate" name="validate" class="btn btn-success">Add Comment</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
     </div>
 
 {% endblock %}

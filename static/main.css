@@ -1,3 +1,9 @@
 body {
   padding-top: 50px;
 }
+
+.grayed_background {
+    padding: 10px;
+    background-color: #f6f6f6;
+    border-radius: 5px;
+}
