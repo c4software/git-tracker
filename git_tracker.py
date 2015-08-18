@@ -48,7 +48,7 @@ def issue(**kwargs):
 @route("/author",["GET"])
 def author(**kwargs):
     author_list = []
-    for author in exec_command("git log --all --format='%aN <%cE>' | sort -u"):
+    for author in json.loads(get_author()):
         try:
             m = re.search('(.+?) <(.+?)>', author)
             author_list.append({"name": m.group(1), "hash": hashlib.md5(m.group(2)).hexdigest()})
@@ -56,7 +56,6 @@ def author(**kwargs):
             author_list.append({"name": author})
 
     return render("author.html", {"authors": author_list})
-
 
 @route("/branch", ["GET"])
 def branch():
