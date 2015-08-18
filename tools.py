@@ -32,6 +32,9 @@ def extract_email_author(author):
     return (m.group(1), m.group(2))
 
 def create_issue(issue_folder, author_name, author_email, data):
+    # Issue are named with a filename starting by a i followed by the timestamp of
+    # the creation.
+    # Ex : i100000
     issue = {
         "author": "{0} <{1}>".format(author_name, author_email),
         "title": data.get('title', [""]).pop(),
@@ -48,13 +51,19 @@ def create_issue(issue_folder, author_name, author_email, data):
     f.close()
 
 def create_comment(issue_folder, author_name, author_email, data, related_issue):
+    # Comment are named withe a filename starting by a r followed by the timestamp
+    # of the related_issue and followed by the timestamp of the creation
+    # Ex : r100000_1000001
     issue = {
         "author": "{0} <{1}>".format(author_name, author_email),
         "created_at": datetime.datetime.now().isoformat(),
-        "content": base64.b64encode(data.get('description', [""]).pop())
+        "content": base64.b64encode(data)
     }
 
     # Write to disk
-    f = open("{0}/r{1}_{2}".format(issue_folder, related_issue, time.time()),'w')
+    comment_id = "r{0}_{1}".format(related_issue, time.time())
+    f = open("{0}/{1}".format(issue_folder, comment_id),'w')
     f.write(json.dumps(issue))
     f.close()
+
+    return comment_id

@@ -55,6 +55,18 @@ def issue(**kwargs):
 
     return render("issue.html", {"issue": issue})
 
+@route("/add_comment", ['POST'])
+def add_comment(**kwargs):
+    try:
+        related_issue = kwargs.get("issue_related_id",[""]).pop()
+        comment_id = create_comment(issue_folder, author_name, author_email, kwargs.get("comments",[""]).pop(), related_issue)
+        return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
+    except Exception as e:
+        print e
+        pass
+
+
+
 @route("/create", ['GET'])
 def create(**kwargs):
     return render("create.html", {"authors": json.loads(get_author())})

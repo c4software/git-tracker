@@ -22,6 +22,7 @@
         <hr>
 
         <form class="form-horizontal grayed_background" action="/add_comment" method="post">
+            <input type="hidden" name="issue_related_id" value="{{issue.id}}">
             <fieldset>
                 <div class="form-group">
                     <div class="col-md-12">
