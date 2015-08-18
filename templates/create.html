@@ -35,9 +35,10 @@
         <div class="form-group">
             <label class="col-md-2 control-label" for="assignto">Assign To</label>
             <div class="col-md-10">
-                <select id="assignto" name="assignto" class="form-control" required="">
+                <select id="assignto" name="assignto" class="form-control">
+                    <option value=""></option>
                     {% for author in authors %}
-                    <option value="">{{author|e}}</option>
+                    <option value="{{author|e}}">{{author|e}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -47,7 +48,14 @@
         <div class="form-group">
             <label class="col-md-2 control-label" for="labels">Labels</label>
             <div class="col-md-10">
-                <select id="labels" name="labels" class="form-control">
+                <select id="label" name="label" class="form-control">
+                    <option value=""></option>
+                    <option value="Important">Important</option>
+                    <option value="Documentation">Documentation</option>
+                    <option value="Feature">Feature</option>
+                    <option value="Bug">Bug</option>
+                    <option value="Evolution">Evolution</option>
+                    <option value="Critical">Critical</option>
                 </select>
             </div>
         </div>

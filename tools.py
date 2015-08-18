@@ -1,6 +1,10 @@
 import os
 import subprocess
 import unicodedata
+import time
+import datetime
+import json
+import base64
 
 def sorted_ls(path):
     try:
@@ -18,3 +22,20 @@ def exec_command(command):
     except Exception as e:
         print e
         return []
+
+
+def create_issue(issue_folder, author_name, author_email, data):
+    issue = {
+        "author": "{0} <{1}>".format(author_name, author_email),
+        "title": data.get('title', [""]).pop(),
+        "created_at": datetime.datetime.now().isoformat(),
+        "updated_at": datetime.datetime.now().isoformat(),
+        "label": data.get('label', [""]).pop(),
+        "content": base64.b64encode(data.get('description', [""]).pop()),
+        "comments": []
+    }
+
+    # Write to disk
+    f = open("{0}/{1}".format(issue_folder, int(time.time())),'w')
+    f.write(json.dumps(issue))
+    f.close()

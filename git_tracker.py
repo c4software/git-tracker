@@ -12,17 +12,17 @@ from os.path import isfile, join
 
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
-from tools import sorted_ls, exec_command
+from tools import sorted_ls, exec_command, create_issue
 
-issuer_folder = ".git_tracker"
+issue_folder = ".git_tracker"
 
 @route("/",["GET"])
 def home(**kwargs):
     # Get issue liste
     issue_list = []
-    for f in sorted_ls(issuer_folder):
+    for f in sorted_ls(issue_folder):
         try:
-            issue = json.load(open(join(issuer_folder,f)))
+            issue = json.load(open(join(issue_folder,f)))
             issue["id"] = f
             issue_list.append(issue)
         except Exception as e:
@@ -39,7 +39,7 @@ def issue(**kwargs):
     # Load de l'issue
     try:
         id_issue = kwargs.get("id")[0]
-        issue = json.load(open(join(issuer_folder,id_issue)))
+        issue = json.load(open(join(issue_folder,id_issue)))
     except:
         return redirect("/")
 
@@ -48,6 +48,11 @@ def issue(**kwargs):
 @route("/create", ['GET'])
 def create(**kwargs):
     return render("create.html", {"authors": json.loads(get_author())})
+
+@route("/create", ['POST'])
+def handle_create(**kwargs):
+    create_issue(issue_folder, author_name, author_email, kwargs)
+    return redirect("/")
 
 @route("/author",["GET"])
 def author(**kwargs):
@@ -97,12 +102,12 @@ author_name = "Anonymous"
 
 if __name__ == '__main__':
     # Init folder for issue
-    if not os.path.exists(issuer_folder):
-        os.makedirs(issuer_folder)
+    if not os.path.exists(issue_folder):
+        os.makedirs(issue_folder)
 
     # Get user configuration for issue creation
     try:
-        author_email = exec_command("git config user.name").pop()
+        author_name = exec_command("git config user.name").pop()
     except:
         print ("Username unavailable. You are now : {0}".format(author_name))
 
