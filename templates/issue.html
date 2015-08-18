@@ -1,4 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<h3>{{issue.title}}</h3>
+
+    <br /><br />
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <button type="button" class="btn btn-success">Open</button> Issue #{{issue.id}} - created by {{issue.author|e}} - <abbr class="timeago" title="{{issue.created_at}}">{{issue.created_at}}</abbr>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <h3>{{issue.title}}</h3>
+
+                {{issue.content}}
+            </div>
+        </div>
+
+        <hr>
+
+    </div>
+
 {% endblock %}

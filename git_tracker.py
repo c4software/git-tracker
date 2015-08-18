@@ -9,10 +9,12 @@ import os
 from os import listdir
 from os.path import isfile, join
 
-
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
-from tools import sorted_ls, exec_command, create_issue
+from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author
+
+import markdown2
+import base64
 
 issue_folder = ".git_tracker"
 
@@ -20,10 +22,10 @@ issue_folder = ".git_tracker"
 def home(**kwargs):
     # Get issue liste
     issue_list = []
-    for f in sorted_ls(issue_folder):
+    for f in sorted_ls("{0}/i*".format(issue_folder)):
         try:
-            issue = json.load(open(join(issue_folder,f)))
-            issue["id"] = f
+            issue = json.load(open(f))
+            issue["id"] = os.path.basename(f)
             issue_list.append(issue)
         except Exception as e:
             print e
@@ -43,6 +45,11 @@ def issue(**kwargs):
     except:
         return redirect("/")
 
+    # Decode description
+    issue['id']         = id_issue
+    issue['content']    = markdown2.markdown(base64.b64decode(issue.get("content", "")))
+
+
     return render("issue.html", {"issue": issue})
 
 @route("/create", ['GET'])
@@ -59,8 +66,8 @@ def author(**kwargs):
     author_list = []
     for author in json.loads(get_author()):
         try:
-            m = re.search('(.+?) <(.+?)>', author)
-            author_list.append({"name": m.group(1), "hash": hashlib.md5(m.group(2)).hexdigest()})
+            name, email = extract_email_author(author)
+            author_list.append({"name": name, "hash": hashlib.md5(email).hexdigest()})
         except Exception as e:
             author_list.append({"name": author})
 
