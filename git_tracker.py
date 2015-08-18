@@ -47,7 +47,7 @@ def issue(**kwargs):
 
 @route("/create", ['GET'])
 def create(**kwargs):
-    return render("create.html", {"author": get_author()})
+    return render("create.html", {"authors": json.loads(get_author())})
 
 @route("/author",["GET"])
 def author(**kwargs):
