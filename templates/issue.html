@@ -20,6 +20,22 @@
         </div>
 
         <hr>
+        <!-- comments list -->
+        {% for cm in issue.comments %}
+            <div class="row m10 t20">
+                <div class="col-xs-2 col-md-2 text-center">
+                    <img src="http://www.gravatar.com/avatar/{{cm.hash}}" />
+                </div>
+                <div class="col-xs-10 col-md-10 grayed_background">
+                    <div>
+                        {{cm.content}}
+                    </div>
+                    <small>{{cm.author|e}} - <abbr class="timeago" title="{{cm.created_at}}">{{cm.created_at}}</abbr> </small>
+                </div>
+            </div>
+        {% endfor %}
+
+        <br><br>
 
         <form class="form-horizontal grayed_background" action="/add_comment" method="post">
             <input type="hidden" name="issue_related_id" value="{{issue.id}}">

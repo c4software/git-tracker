@@ -7,3 +7,11 @@ body {
     background-color: #f6f6f6;
     border-radius: 5px;
 }
+
+.m10{
+    margin: 10px;
+}
+
+.t10{
+    margin-top: 20px;
+}

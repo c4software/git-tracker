@@ -11,10 +11,8 @@ from os.path import isfile, join
 
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
+from markdown_helper import decode_markdown
 from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author
-
-import markdown2
-import base64
 
 issue_folder = ".git_tracker"
 
@@ -47,25 +45,24 @@ def issue(**kwargs):
 
     # Decode description
     issue['id']         = id_issue
-    issue['content']    = markdown2.markdown(base64.b64decode(issue.get("content", "")))
+    issue['content']    = decode_markdown(issue.get("content", ""))
 
+    issue["comments"]   = []
     # Get related comments
     for f in sorted_ls("{0}/r{1}_*".format(issue_folder, id_issue)):
-        print (f)
+        data = json.load(open(f))
+        data["content"] = decode_markdown(data.get("content", ""))
+        name, email = extract_email_author(data.get("author", "Anon <anon@anon.com>"))
+        data["hash"] = hashlib.md5(email).hexdigest()
+        issue["comments"].append(data)
 
     return render("issue.html", {"issue": issue})
 
 @route("/add_comment", ['POST'])
 def add_comment(**kwargs):
-    try:
-        related_issue = kwargs.get("issue_related_id",[""]).pop()
-        comment_id = create_comment(issue_folder, author_name, author_email, kwargs.get("comments",[""]).pop(), related_issue)
-        return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
-    except Exception as e:
-        print e
-        pass
-
-
+    related_issue = kwargs.get("issue_related_id",[""]).pop()
+    comment_id = create_comment(issue_folder, author_name, author_email, kwargs.get("comments",[""]).pop(), related_issue)
+    return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
 
 @route("/create", ['GET'])
 def create(**kwargs):
