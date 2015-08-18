@@ -45,6 +45,10 @@ def issue(**kwargs):
 
     return render("issue.html", {"issue": issue})
 
+@route("/create", ['GET'])
+def create(**kwargs):
+    return render("create.html", {"author": get_author()})
+
 @route("/author",["GET"])
 def author(**kwargs):
     author_list = []
@@ -86,9 +90,26 @@ def get_branch(**kwargs):
 
 @route("/get_log",["GET"])
 def get_log(**kwargs):
-    return json.dumps(exec_command("git log --pretty=format:'%h - %an, %ar : %s' -10"))
+    return json.dumps(exec_command("git log --pretty=format:'%h - %an, %ar : %s' -50"))
+
+author_email = "anon@anon.com"
+author_name = "Anonymous"
 
 if __name__ == '__main__':
+    # Init folder for issue
     if not os.path.exists(issuer_folder):
         os.makedirs(issuer_folder)
+
+    # Get user configuration for issue creation
+    try:
+        author_email = exec_command("git config user.name").pop()
+    except:
+        print ("Username unavailable. You are now : {0}".format(author_name))
+
+    try:
+        author_email = exec_command("git config user.email").pop()
+    except:
+        print ("Email unavailable. You are now : {0}".format(author_email))
+
+
     serve(ip="0.0.0.0", port=5000)
