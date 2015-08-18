@@ -22,11 +22,11 @@
         <hr>
         <!-- comments list -->
         {% for cm in issue.comments %}
-            <div class="row m10 t20">
-                <div class="col-xs-2 col-md-2 text-center">
-                    <img src="http://www.gravatar.com/avatar/{{cm.hash}}" />
+            <div class="row tb10">
+                <div class="col-xs-1 col-md-1">
+                    <img src="http://www.gravatar.com/avatar/{{cm.hash}}?s=60" />
                 </div>
-                <div class="col-xs-10 col-md-10 grayed_background">
+                <div class="col-xs-11 col-md-11 grayed_background">
                     <div>
                         {{cm.content}}
                     </div>
