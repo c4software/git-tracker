@@ -5,7 +5,7 @@
     "updated_at": "2015-08-17T23:41:04+02:00",
     "labels": "",
     "content": "Contenu de demo",
-    comments: [
-        {"todo"}
+    "comments": [
+        {"todo": "todo"}
     ]
 }
