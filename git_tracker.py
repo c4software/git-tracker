@@ -135,5 +135,5 @@ if __name__ == '__main__':
     except:
         print ("Email unavailable. You are now : {0}".format(author_email))
 
-
-    serve(ip="0.0.0.0", port=5000)
+    print ("Git-Tracker is now listening on http://localhost:5000/ ")
+    serve(ip="localhost", port=5000)
