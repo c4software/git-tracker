@@ -52,9 +52,10 @@ def issue(**kwargs):
     # Get related comments
     for f in sorted_ls("{0}/r{1}_*".format(issue_folder, id_issue)):
         data = json.load(open(f))
+        data["id"]      = os.path.basename(f)
         data["content"] = decode_markdown(data.get("content", ""))
-        name, email = extract_email_author(data.get("author", "Anon <anon@anon.com>"))
-        data["hash"] = hashlib.md5(email).hexdigest()
+        name, email     = extract_email_author(data.get("author", "Anon <anon@anon.com>"))
+        data["hash"]    = hashlib.md5(email).hexdigest()
         issue["comments"].append(data)
 
     return render("issue.html", {"issue": issue, "authors": json.loads(get_author())})
@@ -77,7 +78,14 @@ def change_assign_to(**kwargs):
 @route("/add_comment", ['POST'])
 def add_comment(**kwargs):
     related_issue = kwargs.get("issue_related_id",[""]).pop()
-    comment_id = create_comment(issue_folder, kwargs.get("comments",[""]).pop(), related_issue)
+    newstate = kwargs.get("newstate",[None]).pop()
+
+    if related_issue != "":
+        comment_id = create_comment(issue_folder, kwargs.get("comments",[""]).pop(), related_issue)
+
+    if newstate:
+        comment_id = change_state(issue_folder, related_issue, newstate)
+
     return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
 
 @route("/create", ['GET'])

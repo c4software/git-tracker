@@ -104,4 +104,4 @@ def change_state(issue_folder, issue_id, state):
     issue = load_issue(issue_folder, issue_id)
     issue['state'] = state
     write_issue(issue_folder, issue_id, issue)
-    create_comment(issue_folder, "*Status changed to {0}*".format(state), issue_id)
+    return create_comment(issue_folder, "*Status changed to {0}*".format(state), issue_id)

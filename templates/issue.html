@@ -47,7 +47,7 @@
         <hr>
         <!-- comments list -->
         {% for cm in issue.comments %}
-            <div class="row tb10">
+            <div class="row tb10" id="{{cm.id}}">
                 <div class="col-xs-1 col-md-1">
                     <img src="http://www.gravatar.com/avatar/{{cm.hash}}?s=60" />
                 </div>
@@ -63,12 +63,14 @@
         <br><br>
         <div class="row">
             <div>
-                <form class="form-horizontal grayed_background" action="/add_comment" method="post">
-                    <input type="hidden" name="issue_related_id" value="{{issue.id}}">
+                <form class="form-horizontal grayed_background" id="comment_form" action="/add_comment" method="post">
+                    <input type="hidden" name="issue_related_id" value="{{issue.id}}" />
+                    <input type="hidden" name="newstate" id="newstate" value="" />
+
                     <fieldset>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <textarea class="form-control" id="comments" name="comments" required style="width:100%;height: 100px;"></textarea>
+                                <textarea class="form-control" id="comments" name="comments" style="width:100%;height: 100px;"></textarea>
                             </div>
                         </div>
 
@@ -76,9 +78,9 @@
                             <div class="col-md-12 text-right">
                                 <button id="validate" name="validate" class="btn btn-success">Add Comment</button>
                                 {% if issue.state == "Close" %}
-                                    <input type="button" class="btn btn-default" value="Open" id="change_state" />
+                                    <input type="button" class="btn btn-default" data-value="Open" value="Open" id="change_state" />
                                 {% else %}
-                                    <input type="button" class="btn btn-default" value="Close" id="change_state" />
+                                    <input type="button" class="btn btn-default" data-value="Close" value="Close" id="change_state" />
                                 {% endif%}
                             </div>
                         </div>
@@ -89,10 +91,16 @@
     </div>
 
     <script type="text/javascript">
+        $("#comments").bind("keyup", function(){
+            if($(this).val() == ""){
+                $("#change_state").val($("#change_state").attr("data-value"));
+            }else{
+                $("#change_state").val("Comment and "+$("#change_state").attr("data-value"))
+            }
+        })
         $("#change_state").bind("click", function(){
-            $.post("change_state", {"issue_id": "{{issue.id}}", "state": $(this).val()}).done(function(){
-                location.reload();
-            });
+            $("#newstate").val($(this).val());
+            $("#comment_form").submit();
         })
     </script>
 
