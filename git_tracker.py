@@ -9,10 +9,11 @@ import os
 from os import listdir
 from os.path import isfile, join
 
+import settings
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
 from markdown_helper import decode_markdown
-from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author
+from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author, update_assign, change_state
 
 issue_folder = ".git_tracker"
 
@@ -56,12 +57,27 @@ def issue(**kwargs):
         data["hash"] = hashlib.md5(email).hexdigest()
         issue["comments"].append(data)
 
-    return render("issue.html", {"issue": issue})
+    return render("issue.html", {"issue": issue, "authors": json.loads(get_author())})
+
+@route("/change_assign_to", ['POST'])
+def change_assign_to(**kwargs):
+    issue_id = kwargs.get("issue_id",[""]).pop()
+    assignto = kwargs.get("assignto",[""]).pop()
+    update_assign(issue_folder, issue_id, assignto)
+    return ""
+
+@route("/change_state", ['POST'])
+def change_assign_to(**kwargs):
+    issue_id = kwargs.get("issue_id",[""]).pop()
+    state = kwargs.get("state",["Close"]).pop()
+    change_state(issue_folder, issue_id, state)
+    return ""
+
 
 @route("/add_comment", ['POST'])
 def add_comment(**kwargs):
     related_issue = kwargs.get("issue_related_id",[""]).pop()
-    comment_id = create_comment(issue_folder, author_name, author_email, kwargs.get("comments",[""]).pop(), related_issue)
+    comment_id = create_comment(issue_folder, kwargs.get("comments",[""]).pop(), related_issue)
     return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
 
 @route("/create", ['GET'])
@@ -70,7 +86,7 @@ def create(**kwargs):
 
 @route("/create", ['POST'])
 def handle_create(**kwargs):
-    create_issue(issue_folder, author_name, author_email, kwargs)
+    create_issue(issue_folder, kwargs)
     return redirect("/")
 
 @route("/author",["GET"])
@@ -116,9 +132,6 @@ def get_branch(**kwargs):
 def get_log(**kwargs):
     return json.dumps(exec_command("git log --pretty=format:'%h - %an, %ar : %s' -50"))
 
-author_email = "anon@anon.com"
-author_name = "Anonymous"
-
 if __name__ == '__main__':
     # Init folder for issue
     if not os.path.exists(issue_folder):
@@ -126,14 +139,14 @@ if __name__ == '__main__':
 
     # Get user configuration for issue creation
     try:
-        author_name = exec_command("git config user.name").pop()
+        settings.author_name = exec_command("git config user.name").pop()
     except:
-        print ("Username unavailable. You are now : {0}".format(author_name))
+        print ("Username unavailable. You are now : {0}".format(settings.author_name))
 
     try:
-        author_email = exec_command("git config user.email").pop()
+        settings.author_email = exec_command("git config user.email").pop()
     except:
-        print ("Email unavailable. You are now : {0}".format(author_email))
+        print ("Email unavailable. You are now : {0}".format(settings.author_email))
 
     print ("Git-Tracker is now listening on http://localhost:5000/ ")
     serve(ip="localhost", port=5000)
