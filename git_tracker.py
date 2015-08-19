@@ -67,14 +67,6 @@ def change_assign_to(**kwargs):
     update_assign(issue_folder, issue_id, assignto)
     return ""
 
-@route("/change_state", ['POST'])
-def change_assign_to(**kwargs):
-    issue_id = kwargs.get("issue_id",[""]).pop()
-    state = kwargs.get("state",["Close"]).pop()
-    change_state(issue_folder, issue_id, state)
-    return ""
-
-
 @route("/add_comment", ['POST'])
 def add_comment(**kwargs):
     related_issue = kwargs.get("issue_related_id",[""]).pop()
