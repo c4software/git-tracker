@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-12">
                 <h2>Log</h2>
                 <hr>
             </div>
@@ -11,7 +11,17 @@
 
     <ul>
     {% for log in logs %}
-        <li>{{log}}</li>
+        <div class="row tb10">
+            <div class="col-xs-1 col-md-1">
+                <img src="http://www.gravatar.com/avatar/{{log.hash}}?s=60" />
+            </div>
+            <div class="col-xs-11 col-md-11 grayed_background">
+                <div>
+                    {{log.message|e}}
+                </div>
+                <small>{{log.commit_hash}} - {{log.username|e}} - {{log.date}}</small>
+            </div>
+        </div>
     {% endfor %}
     </ul>
 {% endblock %}

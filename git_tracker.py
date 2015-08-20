@@ -4,7 +4,7 @@ import json
 import mimetypes
 import hashlib
 import re
-
+import time
 import os
 from os import listdir
 from os.path import isfile, join
@@ -105,9 +105,26 @@ def author(**kwargs):
 def branch():
     return render("branch.html", {"branchs": json.loads(get_branch())})
 
+@route("/stats", ["GET"])
+def branch():
+    return render("stats.html", {"stats": json.loads(get_stats())})
+
+
 @route("/log", ["GET"])
 def branch():
-    return render("log.html", {"logs": json.loads(get_log())})
+    logs = json.loads(get_log())
+    formated_logs = []
+    for log in logs:
+        log = log.split(";")
+        formated_logs.append({
+        "commit_hash": log.pop(0),
+        "username":log.pop(0),
+        "hash":hashlib.md5(log.pop(0)).hexdigest(),
+        "date":log.pop(0),
+        "message":" ".join(log[:])
+        })
+
+    return render("log.html", {"logs": formated_logs})
 
 
 @override("static")
@@ -130,7 +147,28 @@ def get_branch(**kwargs):
 
 @route("/get_log",["GET"])
 def get_log(**kwargs):
-    return json.dumps(exec_command("git log --pretty=format:'%h - %an, %ar : %s' -50"))
+    return json.dumps(exec_command("git log --pretty=format:'%h;%an;%ae;%ar;%s' -50"))
+
+@route("/nb_of_unpushed",["GET"])
+def nb_of_unpushed(**kwargs):
+    return json.dumps(exec_command("git log --oneline origin..HEAD | wc -l"))
+
+@route("/get_stats",["GET"])
+def get_stats(**kwargs):
+    try:
+        oldest_commit       = exec_command("git log --pretty=oneline --reverse --format='%ct' | head -1")
+        days_project        = int(time.time()-float(oldest_commit.pop(0)))/60/60/24;
+        stats               = exec_command("git shortlog -s -n --all")
+        result              = []
+        for x in stats:
+            x = x.lstrip().split("\t")
+            x.append("{0:.2f}".format(float(x[0])/days_project))
+            result.append(x)
+
+        return json.dumps(result)
+    except Exception as e:
+        print(e)
+        return [""]
 
 if __name__ == '__main__':
     # Init folder for issue
