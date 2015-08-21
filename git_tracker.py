@@ -149,10 +149,6 @@ def get_branch(**kwargs):
 def get_log(**kwargs):
     return json.dumps(exec_command("git log --pretty=format:'%h;%an;%ae;%ar;%s' -50"))
 
-@route("/nb_of_unpushed",["GET"])
-def nb_of_unpushed(**kwargs):
-    return json.dumps(exec_command("git log --oneline origin..HEAD | wc -l"))
-
 @route("/get_stats",["GET"])
 def get_stats(**kwargs):
     try:

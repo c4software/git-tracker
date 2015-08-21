@@ -33,13 +33,6 @@
                 <li><a href="/log">Log</a></li>
                 <li><a href="/stats">Stats</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a style="font-size:1.5em" href="#">
-                        &uarr; <span id="nb_of_unpushed"></span>
-                    </a>
-                </li>
-            </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -52,10 +45,5 @@
         jQuery(document).ready(function() {
             jQuery("abbr.timeago").timeago();
         });
-
-        $.getJSON("/nb_of_unpushed").done(function(data){
-            $("#nb_of_unpushed").html(data);
-        });
-
     </script>
 </html>
