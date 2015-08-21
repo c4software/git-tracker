@@ -1,4 +1,9 @@
-import mistune
+try:
+    import mistune
+except:
+    print("mistune is required")
+    exit(255)
+
 import base64
 
 def decode_markdown(data):

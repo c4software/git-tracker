@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-from jinja2 import Environment, FileSystemLoader
+try:
+    from jinja2 import Environment, FileSystemLoader
+except:
+    print("jinja2 is required")
+    exit(255)
 
 def render(tpl, fields={}):
     try:
