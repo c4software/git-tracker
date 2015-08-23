@@ -99,7 +99,7 @@ def update(**kwargs):
     try:
         id_issue = kwargs.get("id")[0]
         issue = json.load(open(join(issue_folder,id_issue)))
-        issue["content"] = base64.b64decode(issue["content"])
+        issue["content"] = base64.b64decode(issue["content"]).decode("utf8")
         return render("update.html", {"issue": issue, "issue_id": id_issue})
     except:
         return redirect("/")
