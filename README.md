@@ -11,6 +11,12 @@ purpose of this tool is to manage issue on a full decentralized git repository l
 - Stats visualisation
 - Author(s) visualisation
 
+## Installation
+
+```
+pip install -U https://github.com/c4software/git-tracker/archive/master.zip
+```
+
 ## Usage
 
 The usage is simple, just cd to your favorite git repository and
@@ -19,10 +25,4 @@ The usage is simple, just cd to your favorite git repository and
 ➜ cd myAwesomeSharedGit/
 ➜ git-tracker
 Git-Tracker is now listening on http://localhost:5000/
-```
-
-## Installation
-
-```
-pip install -U https://github.com/c4software/git-tracker/archive/master.zip
 ```
