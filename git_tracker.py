@@ -14,7 +14,7 @@ import settings
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
 from markdown_helper import decode_markdown
-from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author, update_assign, change_state, update_issue
+from tools import sorted_ls, exec_command, create_issue, load_issue, create_comment, extract_email_author, update_assign, change_state, update_issue
 
 issue_folder = ".git_tracker"
 
@@ -24,11 +24,11 @@ def home(**kwargs):
     issue_list = []
     for f in sorted_ls("{0}/i*".format(issue_folder)):
         try:
-            issue = json.load(open(f))
+            issue = load_issue(issue_folder,  os.path.basename(f))
             issue["id"] = os.path.basename(f)
             issue_list.append(issue)
         except Exception as e:
-            print e
+            print (e)
             pass
 
     return render("liste.html", {"issues": issue_list})

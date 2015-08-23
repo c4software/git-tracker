@@ -85,12 +85,12 @@ def build_response(output, retour, code=200):
 			if header not in ["code","content"]:
 				output.send_header(header, retour[header])
 		output.end_headers()
-		output.wfile.write(retour['content'])
+		output.wfile.write(retour['content'].encode('utf8'))
 	else:
 		output.send_response(code)
 		output.send_header("Content-type", "text/html")
 		output.end_headers()
-		output.wfile.write(retour)
+		output.wfile.write(retour.encode("utf8"))
 
 
 def redirect(location=""):
