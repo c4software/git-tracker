@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h2>Issues list</h2>
+            </div>
+            <div class="col-xs-12 col-md-6 text-right">
+                <h1><a href="/create" class="btn btn-success btn-sm">Create issue</a></h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Created at</th>
+                    <th>Updated at</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>
+                        <a href="/issue?id={{issue.id}}">{{issue.title|e}}</a>
+                    </td>
+                    <td>{{issue.author|e}}</td>
+                    <td>
+                        <abbr class="timeago" title="{{issue.created_at}}">{{issue.created_at}}</abbr>
+                    </td>
+                    <td>
+                        <abbr class="timeago" title="{{issue.updated_at}}">{{issue.updated_at}}</abbr>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
