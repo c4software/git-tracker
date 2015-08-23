@@ -9,7 +9,7 @@ except ImportError:
     requires.append('argparse')
 
 entry_points = {'console_scripts': [
-                                    'yasb = Yasb.git_tracker'
+                                    'git-tracker = git_tracker.git_tracker'
                                    ]
                 }
 
