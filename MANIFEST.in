@@ -1,0 +1,2 @@
+recursive-include git_tracker/templates *
+recursive-include git_tracker/static *
