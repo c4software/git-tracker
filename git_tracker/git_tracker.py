@@ -199,7 +199,7 @@ def get_stats(**kwargs):
         print(e)
         return [""]
 
-if __name__ == '__main__':
+def main():
     # Init folder for issue
     if not os.path.exists(issue_folder):
         os.makedirs(issue_folder)
@@ -217,3 +217,6 @@ if __name__ == '__main__':
 
     print ("Git-Tracker is now listening on http://localhost:5000/ ")
     serve(ip="localhost", port=5000)
+
+if __name__ == '__main__':
+    main()

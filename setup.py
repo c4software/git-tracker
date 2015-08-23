@@ -9,7 +9,7 @@ except ImportError:
     requires.append('argparse')
 
 entry_points = {'console_scripts': [
-                                    'git-tracker = git_tracker.git_tracker'
+                                    'git-tracker = git_tracker.git_tracker:main'
                                    ]
                 }
 
@@ -24,7 +24,7 @@ setup(
     author_email='c4software@gmail.com',
     description="Simple issue tracker for Git based on Git.",
     long_description="",
-    packages=['Git-Tracker'],
+    packages=['git_tracker'],
     include_package_data=True,
     install_requires=requires,
     entry_points=entry_points,
