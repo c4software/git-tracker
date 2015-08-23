@@ -8,12 +8,13 @@ import time
 import os
 from os import listdir
 from os.path import isfile, join
+import base64
 
 import settings
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
 from markdown_helper import decode_markdown
-from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author, update_assign, change_state
+from tools import sorted_ls, exec_command, create_issue, create_comment, extract_email_author, update_assign, change_state, update_issue
 
 issue_folder = ".git_tracker"
 
@@ -89,6 +90,27 @@ def handle_create(**kwargs):
     create_issue(issue_folder, kwargs)
     return redirect("/")
 
+@route("/update", ['GET'])
+def update(**kwargs):
+    try:
+        id_issue = kwargs.get("id")[0]
+        issue = json.load(open(join(issue_folder,id_issue)))
+        issue["content"] = base64.b64decode(issue["content"])
+        return render("update.html", {"issue": issue, "issue_id": id_issue})
+    except:
+        return redirect("/")
+
+@route("/update", ['POST'])
+def handle_update(**kwargs):
+    if "issue_id" in kwargs:
+        try:
+            update_issue(issue_folder, kwargs)
+            return redirect("/issue?id={0}".format(kwargs.get("issue_id")[0]))
+        except Exception as e:
+            print (e)
+    else:
+        return redirect("/")
+
 @route("/author",["GET"])
 def author(**kwargs):
     author_list = []
@@ -107,7 +129,7 @@ def branch():
 
 @route("/stats", ["GET"])
 def branch():
-    return render("stats.html", {"stats": json.loads(get_stats())})
+    return render("stats.html", {"stats": json.loads(get_stats()), "nb_commits": json.loads(get_number_of_commits())})
 
 
 @route("/log", ["GET"])
@@ -148,6 +170,13 @@ def get_branch(**kwargs):
 @route("/get_log",["GET"])
 def get_log(**kwargs):
     return json.dumps(exec_command("git log --pretty=format:'%h;%an;%ae;%ar;%s' -50"))
+
+@route("/get_number_of_commits", ["GET"])
+def get_number_of_commits(**kwargs):
+    try:
+        return json.dumps(exec_command("git rev-list HEAD --count"))
+    except Exception as e:
+        return [""]
 
 @route("/get_stats",["GET"])
 def get_stats(**kwargs):

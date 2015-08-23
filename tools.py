@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import glob
 import subprocess
@@ -90,6 +92,16 @@ def write_issue(issue_folder, issue_id, issue):
     finally:
         if f:
             f.close()
+
+def update_issue(issue_folder, data):
+    issue_id = data.get("issue_id", "")[0]
+    if issue_id != "":
+        j = load_issue(issue_folder, issue_id)
+        j["title"] = data.get('title', [""]).pop()
+        j["content"] = base64.b64encode(data.get('description', [""]).pop())
+        j["updated_at"] = datetime.datetime.now().isoformat()
+        write_issue(issue_folder, issue_id, j)
+
 
 def update_assign(issue_folder, issue_id, assignto):
     issue = load_issue(issue_folder, issue_id)
