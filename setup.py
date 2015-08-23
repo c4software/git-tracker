@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-requires = ['jinja2','docutils','pygments']
+requires = ['jinja2','mistune']
 
 try:
     import argparse  # NOQA
