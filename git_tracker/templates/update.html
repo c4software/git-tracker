@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <h2>Update Issue</h2>
+            <hr>
+        </div>
+        <div class="col-xs-12 col-md-6 text-right">
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" method="post">
+    <input type="hidden" value="{{issue_id}}" name="issue_id">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="title">Title</label>
+            <div class="col-md-10">
+                <input id="title" name="title" type="text" value="{{issue.title}}" class="form-control input-md" required="">
+            </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="description">Description</label>
+            <div class="col-md-10">
+                <textarea class="form-control" id="description" name="description" style="width:100%;height: 340px;">{{issue.content}}</textarea>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group grayed_background">
+            <label class="col-md-2 control-label" for="validate"></label>
+            <div class="col-md-4">
+                <button id="validate" name="validate" class="btn btn-success">Update issue</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+{% endblock %}
