@@ -14,3 +14,7 @@ Git-Tracker is now listening on http://localhost:5000/
 ```
 
 ## Installation
+
+```
+pip install -U https://github.com/c4software/git-tracker/archive/master.zip
+```
