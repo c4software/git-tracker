@@ -86,6 +86,7 @@ def load_issue(issue_folder, issue_id):
 def write_issue(issue_folder, issue_id, issue):
     try:
         f = open("{0}/{1}".format(issue_folder, issue_id),'w')
+        issue["updated_at"] = datetime.datetime.now().isoformat()
         f.write(json.dumps(issue))
     except Exception as e:
         pass
@@ -99,7 +100,6 @@ def update_issue(issue_folder, data):
         j = load_issue(issue_folder, issue_id)
         j["title"] = data.get('title', [""]).pop()
         j["content"] = base64.b64encode(data.get('description', [""]).pop())
-        j["updated_at"] = datetime.datetime.now().isoformat()
         write_issue(issue_folder, issue_id, j)
 
 
