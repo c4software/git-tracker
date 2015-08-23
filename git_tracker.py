@@ -47,17 +47,21 @@ def issue(**kwargs):
 
     # Decode description
     issue['id']         = id_issue
-    issue['content']    = decode_markdown(issue.get("content", ""))
+    issue['content']    = decode_markdown(issue.get("content", "")).decode("utf8")
 
     issue["comments"]   = []
     # Get related comments
     for f in sorted_ls("{0}/r{1}_*".format(issue_folder, id_issue)):
-        data = json.load(open(f))
-        data["id"]      = os.path.basename(f)
-        data["content"] = decode_markdown(data.get("content", ""))
-        name, email     = extract_email_author(data.get("author", "Anon <anon@anon.com>"))
-        data["hash"]    = hashlib.md5(email).hexdigest()
-        issue["comments"].append(data)
+        try:
+            data = json.load(open(f))
+            data["id"]      = os.path.basename(f)
+            data["content"] = decode_markdown(data.get("content", "")).decode("utf8")
+            name, email     = extract_email_author(data.get("author", "Anon <anon@anon.com>"))
+            data["hash"]    = hashlib.md5(email).hexdigest()
+            issue["comments"].append(data)
+        except Exception as e:
+            print (e)
+            pass
 
     return render("issue.html", {"issue": issue, "authors": json.loads(get_author())})
 

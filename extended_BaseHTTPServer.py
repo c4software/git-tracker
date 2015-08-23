@@ -36,7 +36,7 @@ class extended_BaseHTTPServer(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_POST(s):
 		o = urlparse(s.path)
 		length = int(s.headers['Content-Length'])
-		arguments = parse_qs(s.rfile.read(length).decode('utf-8'))
+		arguments = parse_qs(s.rfile.read(length))
 		s.do_routing(o, arguments, "POST")
 
 	def do_GET(s):
