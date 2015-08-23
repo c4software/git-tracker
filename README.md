@@ -1,7 +1,7 @@
 # Git-Tracker
 
-Git-Tracker is a simple issue tracker based on git for git repository. The main
-purpose of this tool is for an full decentralized git repository (like git bare hosted on dropbox or Bittorrent Sync)
+Git-Tracker is a simple issue tracker based on git for a git repository. The main
+purpose of this tool is to manage issue on a full decentralized git repository like git bare hosted on dropbox or Bittorrent Sync.
 
 ## Usage
 
