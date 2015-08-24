@@ -3,7 +3,7 @@
 Git-Tracker is a simple issue tracker based on git for a git repository. The main
 purpose of this tool is to manage issue on a full decentralized git repository like git bare hosted on dropbox or Bittorrent Sync.
 
-This tools is actually designed to work with **Python2**.
+Warning : This tool is designed to works with **Python2**
 
 ## Functionalities
 
