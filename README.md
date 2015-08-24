@@ -26,3 +26,7 @@ The usage is simple, just cd to your favorite git repository and
 ➜ git-tracker
 Git-Tracker is now listening on http://localhost:5000/
 ```
+
+## Todo
+
+Add a script to check if you have issue assigned to you.
