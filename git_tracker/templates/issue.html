@@ -22,7 +22,6 @@
 
             <div class="col-xs-3 col-md-3 form-horizontal">
                 <input type="hidden" name="issue_related_id" value="{{issue.id}}">
-
                 <div class="form-group" id="assignee_container">
                     <div class="row">
                         <label class="col-md-3 control-label" for="assignto">Assignee</label>
@@ -43,6 +42,28 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group" id="label_container">
+                    <div class="row">
+                        <label class="col-md-3 control-label" for="label">Labels</label>
+                        <div class="col-md-9">
+                            <select id="label" name="label" class="form-control">
+                                <option value=""></option>
+                                {% for label in labels %}
+                                    <option {% if issue.label == label %}selected{% endif %} value="{{label}}">{{label}}</option>
+                                {% endfor %}
+                            </select>
+
+                            <script>
+                                $("#label").bind("change", function(){
+                                    $.post("change_label", {"issue_id": "{{issue.id}}", "label": $(this).val()});
+                                });
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         </div>

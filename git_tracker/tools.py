@@ -102,6 +102,14 @@ def update_issue(issue_folder, data):
         j["content"] = base64.b64encode(data.get('description', [""]).pop())
         write_issue(issue_folder, issue_id, j)
 
+def update_label(issue_folder, issue_id, label):
+    issue = load_issue(issue_folder, issue_id)
+    issue['label'] = label
+    write_issue(issue_folder, issue_id, issue)
+    if label == "":
+        create_comment(issue_folder, "*Label removed*", issue_id)
+    else:
+        create_comment(issue_folder, "*Label changed to '{0}'*".format(label), issue_id)
 
 def update_assign(issue_folder, issue_id, assignto):
     issue = load_issue(issue_folder, issue_id)

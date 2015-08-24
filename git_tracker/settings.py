@@ -2,3 +2,12 @@
 
 author_email = "anon@anon.com"
 author_name = "Anonymous"
+
+labels = [
+"Important",
+"Documentation",
+"Feature",
+"Bug",
+"Evolution",
+"Critical"
+]

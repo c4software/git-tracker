@@ -14,7 +14,7 @@ import settings
 from extended_BaseHTTPServer import serve, route, override, redirect
 from jinja_helper import render, get_wd
 from markdown_helper import decode_markdown
-from tools import sorted_ls, exec_command, create_issue, load_issue, create_comment, extract_email_author, update_assign, change_state, update_issue
+from tools import sorted_ls, exec_command, create_issue, load_issue, create_comment, extract_email_author, update_assign, change_state, update_issue, update_label
 
 issue_folder = ".git_tracker"
 
@@ -63,7 +63,7 @@ def issue(**kwargs):
             print (e)
             pass
 
-    return render("issue.html", {"issue": issue, "authors": json.loads(get_author())})
+    return render("issue.html", {"issue": issue, "labels": settings.labels, "authors": json.loads(get_author())})
 
 @route("/change_assign_to", ['POST'])
 def change_assign_to(**kwargs):
@@ -71,6 +71,14 @@ def change_assign_to(**kwargs):
     assignto = kwargs.get("assignto",[""]).pop()
     update_assign(issue_folder, issue_id, assignto)
     return ""
+
+@route("/change_label", ['POST'])
+def change_assign_to(**kwargs):
+    issue_id = kwargs.get("issue_id",[""]).pop()
+    label = kwargs.get("label",[""]).pop()
+    update_label(issue_folder, issue_id, label)
+    return ""
+
 
 @route("/add_comment", ['POST'])
 def add_comment(**kwargs):
@@ -87,7 +95,7 @@ def add_comment(**kwargs):
 
 @route("/create", ['GET'])
 def create(**kwargs):
-    return render("create.html", {"authors": json.loads(get_author())})
+    return render("create.html", {"authors": json.loads(get_author()), "labels": settings.labels})
 
 @route("/create", ['POST'])
 def handle_create(**kwargs):
