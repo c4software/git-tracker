@@ -31,7 +31,7 @@ def home(**kwargs):
             print (e)
             pass
 
-    return render("liste.html", {"issues": issue_list})
+    return render("liste.html", {"issues": issue_list, "authors": json.loads(get_author())})
 
 @route("/issue",["GET"])
 def issue(**kwargs):

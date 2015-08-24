@@ -11,7 +11,32 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <ul class="nav nav-tabs nav-state">
+      <li role="presentation" class="active" data-filter="Open"><a href="#">Open</a></li>
+      <li role="presentation" data-filter="Close"><a href="#">Closed</a></li>
+      <li role="presentation" data-filter=""><a href="#">All</a></li>
+    </ul>
+    <div class="container-fluid">
+        <div class="row grayed_background_raw p10">
+            <div class="col-xs-5 col-md-5">
+                <form class="form-horizontal" onsubmit="return false">
+                    <div class="form-group"  style="margin:0">
+                        <label class="col-md-3 control-label" for="assignto">Assign To</label>
+                        <div class="col-md-9">
+                            <select id="assignto" name="assignto" class="form-control">
+                                <option value=""></option>
+                                {% for author in authors %}
+                                    <option value="{{author|e}}">{{author|e}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive top20">
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -23,7 +48,7 @@
             </thead>
             <tbody>
                 {% for issue in issues %}
-                <tr>
+                <tr class="issue_list" data-assignto="{{issue.assign_to}}" data-state="{{issue.state}}">
                     <td>
                         <a href="/issue?id={{issue.id}}">{{issue.title|e}}</a>
                     </td>
@@ -39,4 +64,36 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        $(".nav-state>li").bind("click", function(ev){
+            $(".nav-state>li").removeClass("active");
+            $(this).addClass("active");
+
+            // Filtre
+            applyFilter();
+        });
+
+        $("#assignto").bind("change", function(){
+            applyFilter();
+        });
+
+        function applyFilter(){
+            // Filtre sur les status
+            $(".issue_list").show();
+            if($(".nav-state>li.active").attr("data-filter") != ""){
+                $(".issue_list").not("[data-state='"+$(".nav-state>li.active").attr("data-filter")+"']").hide();
+            }
+
+            // Filtre sur l'assignation
+            if($("#assignto").val() != ""){
+                $(".issue_list").not(".issue_list[data-assignto='"+$("#assignto").val()+"']").hide();
+            }
+        }
+
+
+
+        $(".nav-state>li:first").trigger("click");
+    </script>
+
 {% endblock %}

@@ -8,8 +8,16 @@ body {
     border-radius: 5px;
 }
 
+.grayed_background_raw{
+    background-color: #f6f6f6;
+}
+
 .m10{
     margin: 10px;
+}
+
+.p10{
+    padding: 10px;
 }
 
 .tb10{
@@ -19,4 +27,8 @@ body {
 
 .cursorNormal{
     cursor: default;
+}
+
+.top20{
+    padding-top: 20px;
 }
