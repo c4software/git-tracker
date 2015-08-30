@@ -122,6 +122,9 @@ def update_assign(issue_folder, issue_id, assignto):
 
 def change_state(issue_folder, issue_id, state):
     issue = load_issue(issue_folder, issue_id)
-    issue['state'] = state
+    if state == "Open":
+        issue['state'] = "Open"
+    else:
+        issue["state"] = "Close"
     write_issue(issue_folder, issue_id, issue)
     return create_comment(issue_folder, "*Status changed to {0}*".format(state), issue_id)
