@@ -123,7 +123,7 @@
             }
         })
         $("#change_state").bind("click", function(){
-            $("#newstate").val($(this).val());
+            $("#newstate").val($(this).attr("data-value"));
             $("#comment_form").submit();
         })
     </script>
