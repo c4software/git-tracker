@@ -18,7 +18,7 @@ CHANGELOG = ""
 
 setup(
     name="Git-Tracker",
-    version="0.1",
+    version="0.2",
     url='http://blog.lesite.us',
     author='Valentin Brosseau',
     author_email='c4software@gmail.com',
