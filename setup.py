@@ -9,7 +9,8 @@ except ImportError:
     requires.append('argparse')
 
 entry_points = {'console_scripts': [
-                                    'git-tracker = git_tracker.git_tracker:main'
+                                    'git-tracker = git_tracker.git_tracker:main',
+                                    'git-tracker-get-my-issue = git_tracker.get_my_issue:main'
                                    ]
                 }
 

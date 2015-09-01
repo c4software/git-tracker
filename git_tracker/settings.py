@@ -11,3 +11,5 @@ labels = [
 "Evolution",
 "Critical"
 ]
+
+issue_folder = ".git_tracker"

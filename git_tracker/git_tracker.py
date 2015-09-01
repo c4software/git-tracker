@@ -16,15 +16,13 @@ from jinja_helper import render, get_wd
 from markdown_helper import decode_markdown
 from tools import sorted_ls, exec_command, create_issue, load_issue, create_comment, extract_email_author, update_assign, change_state, update_issue, update_label
 
-issue_folder = ".git_tracker"
-
 @route("/",["GET"])
 def home(**kwargs):
     # Get issue liste
     issue_list = []
-    for f in sorted_ls("{0}/i*".format(issue_folder)):
+    for f in sorted_ls("{0}/i*".format(settings.issue_folder)):
         try:
-            issue = load_issue(issue_folder,  os.path.basename(f))
+            issue = load_issue(settings.issue_folder,  os.path.basename(f))
             issue["id"] = os.path.basename(f)
             issue_list.append(issue)
         except Exception as e:
@@ -41,7 +39,7 @@ def issue(**kwargs):
     # Load de l'issue
     try:
         id_issue = kwargs.get("id")[0]
-        issue = json.load(open(join(issue_folder,id_issue)))
+        issue = json.load(open(join(settings.issue_folder,id_issue)))
     except:
         return redirect("/")
 
@@ -51,7 +49,7 @@ def issue(**kwargs):
 
     issue["comments"]   = []
     # Get related comments
-    for f in sorted_ls("{0}/r{1}_*".format(issue_folder, id_issue)):
+    for f in sorted_ls("{0}/r{1}_*".format(settings.issue_folder, id_issue)):
         try:
             data = json.load(open(f))
             data["id"]      = os.path.basename(f)
@@ -69,14 +67,14 @@ def issue(**kwargs):
 def change_assign_to(**kwargs):
     issue_id = kwargs.get("issue_id",[""]).pop()
     assignto = kwargs.get("assignto",[""]).pop()
-    update_assign(issue_folder, issue_id, assignto)
+    update_assign(settings.issue_folder, issue_id, assignto)
     return ""
 
 @route("/change_label", ['POST'])
 def change_assign_to(**kwargs):
     issue_id = kwargs.get("issue_id",[""]).pop()
     label = kwargs.get("label",[""]).pop()
-    update_label(issue_folder, issue_id, label)
+    update_label(settings.issue_folder, issue_id, label)
     return ""
 
 
@@ -86,10 +84,10 @@ def add_comment(**kwargs):
     newstate = kwargs.get("newstate",[None]).pop()
 
     if related_issue != "":
-        comment_id = create_comment(issue_folder, kwargs.get("comments",[""]).pop(), related_issue)
+        comment_id = create_comment(settings.issue_folder, kwargs.get("comments",[""]).pop(), related_issue)
 
     if newstate:
-        comment_id = change_state(issue_folder, related_issue, newstate)
+        comment_id = change_state(settings.issue_folder, related_issue, newstate)
 
     return redirect("/issue?id={0}#{1}".format(related_issue, comment_id))
 
@@ -99,14 +97,14 @@ def create(**kwargs):
 
 @route("/create", ['POST'])
 def handle_create(**kwargs):
-    create_issue(issue_folder, kwargs)
+    create_issue(settings.issue_folder, kwargs)
     return redirect("/")
 
 @route("/update", ['GET'])
 def update(**kwargs):
     try:
         id_issue = kwargs.get("id")[0]
-        issue = json.load(open(join(issue_folder,id_issue)))
+        issue = json.load(open(join(settings.issue_folder,id_issue)))
         issue["content"] = base64.b64decode(issue["content"]).decode("utf8")
         return render("update.html", {"issue": issue, "issue_id": id_issue})
     except:
@@ -116,7 +114,7 @@ def update(**kwargs):
 def handle_update(**kwargs):
     if "issue_id" in kwargs:
         try:
-            update_issue(issue_folder, kwargs)
+            update_issue(settings.issue_folder, kwargs)
             return redirect("/issue?id={0}".format(kwargs.get("issue_id")[0]))
         except Exception as e:
             print (e)
@@ -209,8 +207,8 @@ def get_stats(**kwargs):
 
 def main():
     # Init folder for issue
-    if not os.path.exists(issue_folder):
-        os.makedirs(issue_folder)
+    if not os.path.exists(settings.issue_folder):
+        os.makedirs(settings.issue_folder)
 
     # Get user configuration for issue creation
     try:

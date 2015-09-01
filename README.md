@@ -29,6 +29,14 @@ The usage is simple, just cd to your favorite git repository and
 Git-Tracker is now listening on http://localhost:5000/
 ```
 
-## Todo
+## Usage command line
 
-Add a script to check if you have issue assigned to you.
+### Number of issue
+
+You can invoke git-tracker-get-my-issue from your command line to check how many issue you have assigned to you.
+
+```
+➜ cd myAwesomeSharedGit/
+➜ git-tracker-get-my-issue
+You have 1 issue(s) assigned to you.
+```
